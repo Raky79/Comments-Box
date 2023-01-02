@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import {getComments as getCommentsApi} from '../api';
+import Comment from './Comment'; 
 
 const Comments  = ({currentUserId}) => {     // we need to pass in our props the currentUserId (in App.js -- <Comments currentUserId="1"/>) which will pass from our parent
     
@@ -17,10 +18,6 @@ const Comments  = ({currentUserId}) => {     // we need to pass in our props the
 
     }, [])
 
-
-
-    
-
     return (
       <div className="comments">
        <h3 className="comments-title">Comments</h3>
@@ -29,16 +26,22 @@ const Comments  = ({currentUserId}) => {     // we need to pass in our props the
        {/* and inside we want map through our comments and some of the comments are actuallly replies, so here we must first of all get our roots for comments and then render 
        their replies this is why on the line 8 we have to create a new variable rootComments */}
        {rootComments.map(rootComment => (
-    
-        <div key={rootComment.id}>     {/* we need to provide an unique id, which why <div key={rootComment.id}> */}
-            {/* inside we can get some markup for this route comment i.e. {rootComment.body}  because now body is our text */}
-            {rootComment.body}    
-        </div>
+        <Comment key={rootComment.id} comment= {rootComment}/>
        ))}      
-
        </div>   
       </div>
     );
   }
   
   export default Comments;
+
+
+
+
+
+
+  //Deleted from line 29 , previous code : 
+    // <div key={rootComment.id}>    we need to provide an unique id, which why <div key={rootComment.id}>
+        // inside we can get some markup for this route comment i.e. {rootComment.body}  because now body is our text
+    //  {rootComment.body}    
+    //     </div> 
