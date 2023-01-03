@@ -9,7 +9,11 @@ const Comments  = ({currentUserId}) => {     // we need to pass in our props the
     const rootComments = backendComments.filter(
         backendComment => backendComment.parentId === null
         );              // we take this comments with parentId === null which means this comments don't have parentId which is why we are filtering by this predicate(a function that returns a single TRUE or FALSE) [backendComment.parentId === null)], and we are accessing this backendComment 
-    console.log('backendComments', backendComments);
+    
+    // We need to create a function which returns replies for an specific comment: 
+    const getReplies = commentId => {
+        return backendComments.filter(backendComment => backendComment.parentId === commentId) // we are getting the array of our replies but we want the newest comments to be on the top 
+    }
 
     useEffect(() => {
         getCommentsApi().then(data => {      //the data will be the array of the backendComments
