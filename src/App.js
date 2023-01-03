@@ -5,7 +5,7 @@ const App = () => {
   return (
     <div>
      <h1>
-      Hello Codeclan!
+      Comment Box in the making!
      </h1>
      <Comments currentUserId="1"/>
     </div>
