@@ -12,8 +12,9 @@ const Comments  = ({currentUserId}) => {     // we need to pass in our props the
     
     // We need to create a function which returns replies for an specific comment: 
     const getReplies = commentId => {
-        return backendComments.filter(backendComment => backendComment.parentId === commentId) // we are getting the array of our replies but we want the newest comments to be on the top 
-    }
+        return backendComments.filter(backendComment => backendComment.parentId === commentId).sort((a, b) => // we are getting the array of our replies but we want the newest comments to be on the top 
+        new Date (a.createdAt).getTime() - new Date(b.createdAt).getTime);     // we need to convert createdAt ISO string to JS date // this sorts our replies in ascendent order
+    };
 
     useEffect(() => {
         getCommentsApi().then(data => {      //the data will be the array of the backendComments
@@ -30,7 +31,7 @@ const Comments  = ({currentUserId}) => {     // we need to pass in our props the
        {/* and inside we want map through our comments and some of the comments are actuallly replies, so here we must first of all get our roots for comments and then render 
        their replies this is why on the line 8 we have to create a new variable rootComments */}
        {rootComments.map(rootComment => (
-        <Comment key={rootComment.id} comment= {rootComment}/>
+        <Comment key={rootComment.id} comment= {rootComment} replies={getReplies(rootComment.id)}/>
        ))}      
        </div>   
       </div>
