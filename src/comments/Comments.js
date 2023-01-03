@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import {getComments as getCommentsApi, createComment as createCommentApi} from '../api';
+import {getComments as getCommentsApi, createComment as createCommentApi, deleteComment as deleteCommentApi} from '../api';
 import Comment from './Comment'; 
 import CommentForm from './CommentForm'; 
 
@@ -20,9 +20,18 @@ const Comments  = ({currentUserId}) => {     // we need to pass in our props the
     const addComment = (text, parentId) => {
         console.log("addComment", text, parentId);     // parentId , because when we create a reply we create a comment which is the child of another comment
         createCommentApi(text, parentId).then(comment => {
-            setbackendComments([comment, ...backendComments])
-        })
+            setbackendComments([comment, ...backendComments]); // we want our new comment to be at the beginning , this is why first the comment and after that spreading the backendComments that we already have 
+        }); 
     };  
+
+    const deleteComment = (commentId) => {
+        if (window.confirm('Are you sure that you want to delete this comment?')) {
+            deleteCommentApi(commentId).then(() => {
+                const updatedBackendComments = backendComments.filter(backendComment => backendComment.id !== commentId);
+                setbackendComments(updatedBackendComments);
+            });
+        }
+    };
 
     useEffect(() => {
         getCommentsApi().then(data => {      //the data will be the array of the backendComments
@@ -41,7 +50,12 @@ const Comments  = ({currentUserId}) => {     // we need to pass in our props the
        {/* and inside we want map through our comments and some of the comments are actuallly replies, so here we must first of all get our roots for comments and then render 
        their replies this is why on the line 8 we have to create a new variable rootComments */}
        {rootComments.map(rootComment => (
-        <Comment key={rootComment.id} comment= {rootComment} replies={getReplies(rootComment.id)}/>
+        <Comment key={rootComment.id} 
+        comment= {rootComment} 
+        replies={getReplies(rootComment.id)}
+        currentUserId={currentUserId}
+        deleteComment={deleteComment}
+        />
        ))}      
        </div>   
       </div>
