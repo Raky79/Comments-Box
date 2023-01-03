@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import {getComments as getCommentsApi} from '../api';
+import {getComments as getCommentsApi, createComment as createCommentApi} from '../api';
 import Comment from './Comment'; 
 import CommentForm from './CommentForm'; 
 
@@ -19,6 +19,9 @@ const Comments  = ({currentUserId}) => {     // we need to pass in our props the
 
     const addComment = (text, parentId) => {
         console.log("addComment", text, parentId);     // parentId , because when we create a reply we create a comment which is the child of another comment
+        createCommentApi(text, parentId).then(comment => {
+            setbackendComments([comment, ...backendComments])
+        })
     };  
 
     useEffect(() => {
@@ -32,7 +35,7 @@ const Comments  = ({currentUserId}) => {     // we need to pass in our props the
       <div className="comments">
        <h3 className="comments-title">Comments</h3>
        <div className="comment-form-title">Write comment</div>
-       <CommentForm submitLabel="Write" handleSubmit="addComment"/>
+       <CommentForm submitLabel="Write" handleSubmit={addComment}/>
        {/* the container for the list of comments: */}
        <div className="comments-container">
        {/* and inside we want map through our comments and some of the comments are actuallly replies, so here we must first of all get our roots for comments and then render 
