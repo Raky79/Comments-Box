@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import {getComments as getCommentsApi} from '../api';
 import Comment from './Comment'; 
+import CommentForm from './CommentForm'; 
 
 const Comments  = ({currentUserId}) => {     // we need to pass in our props the currentUserId (in App.js -- <Comments currentUserId="1"/>) which will pass from our parent
     
@@ -16,6 +17,10 @@ const Comments  = ({currentUserId}) => {     // we need to pass in our props the
         new Date (a.createdAt).getTime() - new Date(b.createdAt).getTime);     // we need to convert createdAt ISO string to JS date // this sorts our replies in ascendent order
     };
 
+    const addComment = (text, parentId) => {
+        console.log("addComment", text, parentId);     // parentId , because when we create a reply we create a comment which is the child of another comment
+    };  
+
     useEffect(() => {
         getCommentsApi().then(data => {      //the data will be the array of the backendComments
             setbackendComments(data);        // this is why here we can set the data we got from the backend
@@ -26,6 +31,8 @@ const Comments  = ({currentUserId}) => {     // we need to pass in our props the
     return (
       <div className="comments">
        <h3 className="comments-title">Comments</h3>
+       <div className="comment-form-title">Write comment</div>
+       <CommentForm submitLabel="Write" handleSubmit="addComment"/>
        {/* the container for the list of comments: */}
        <div className="comments-container">
        {/* and inside we want map through our comments and some of the comments are actuallly replies, so here we must first of all get our roots for comments and then render 
