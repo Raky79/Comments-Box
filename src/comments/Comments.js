@@ -56,7 +56,7 @@ const Comments  = ({currentUserId}) => {     // we need to pass in our props the
 
     return (
       <div className="comments">
-       <h3 className="comments-title">Comments</h3>
+       {/* <h3 className="comments-title">Comments</h3> */}
        <div className="comment-form-title">Write comment</div>
        <CommentForm submitLabel="Write" handleSubmit={addComment}/>
        {/* the container for the list of comments: */}
